@@ -1,22 +1,30 @@
-from node import Node
-from queues import PriorityQueue
+from node import Nodo
+from estructuras import ColaPrioridad
 
-def uniform_cost(graph, start, goal):
-    frontier = PriorityQueue()
-    frontier.ADD(Node(start, g=0))
-    explored = set()
+def CostoUniforme(grafo, inicio, meta):
 
-    while not frontier.EMPTY():
-        current = frontier.POP()
+    frontera = ColaPrioridad()
+    frontera.ADD(Nodo(inicio, costoCamino=0))
+    explorados = set()
 
-        if current.name == goal:
-            return current
+    while not frontera.EMPTY():
 
-        explored.add(current.name)
+        nodo = frontera.POP()
 
-        for neighbor, cost in graph.neighbors(current.name):
-            if neighbor not in explored:
-                g = current.g + cost
-                frontier.ADD(Node(neighbor, current, g=g))
+        if nodo.Estado == meta:
+            return nodo
+
+        explorados.add(nodo.Estado)
+
+        for vecino, costo in grafo.vecinos(nodo.Estado):
+
+            if vecino not in explorados:
+                hijo = Nodo(
+                    estado=vecino,
+                    padre=nodo,
+                    accion=vecino,
+                    costoCamino=nodo.CostoCamino + costo
+                )
+                frontera.ADD(hijo)
 
     return None

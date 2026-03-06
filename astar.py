@@ -1,23 +1,38 @@
-from node import Node
-from queues import PriorityQueue
+from node import Nodo
+from estructuras import ColaPrioridad
 
-def astar(graph, start, goal):
-    frontier = PriorityQueue()
-    frontier.ADD(Node(start, g=0, h=graph.h(start)))
-    explored = set()
+def AStar(grafo, inicio, meta):
 
-    while not frontier.EMPTY():
-        current = frontier.POP()
+    frontera = ColaPrioridad()
 
-        if current.name == goal:
-            return current
+    nodoInicial = Nodo(inicio, costoCamino=0)
+    frontera.ADD(nodoInicial)
 
-        explored.add(current.name)
+    explorados = set()
 
-        for neighbor, cost in graph.neighbors(current.name):
-            if neighbor not in explored:
-                g = current.g + cost
-                h = graph.h(neighbor)
-                frontier.ADD(Node(neighbor, current, g=g, h=h))
+    while not frontera.EMPTY():
+
+        nodo = frontera.POP()
+
+        if nodo.Estado == meta:
+            return nodo
+
+        explorados.add(nodo.Estado)
+
+        for vecino, costo in grafo.vecinos(nodo.Estado):
+
+            if vecino not in explorados:
+
+                g = nodo.CostoCamino + costo
+                h = grafo.h(vecino)
+
+                hijo = Nodo(
+                    estado=vecino,
+                    padre=nodo,
+                    accion=vecino,
+                    costoCamino=g + h
+                )
+
+                frontera.ADD(hijo)
 
     return None

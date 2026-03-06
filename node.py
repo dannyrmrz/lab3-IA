@@ -1,10 +1,9 @@
-class Node:
-    def __init__(self, name, parent=None, g=0, h=0):
-        self.name = name
-        self.parent = parent
-        self.g = g
-        self.h = h
-        self.f = g + h
+class Nodo:
+    def __init__(self, estado, padre=None, accion=None, costoCamino=0):
+        self.Estado = estado              # ID del estado
+        self.Padre = padre                # Nodo padre
+        self.Accion = accion              # Acción aplicada
+        self.CostoCamino = costoCamino    # g(n)
 
     def __lt__(self, other):
-        return self.f < other.f
+        return self.CostoCamino < other.CostoCamino

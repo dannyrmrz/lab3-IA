@@ -1,21 +1,34 @@
-from node import Node
-from queues import LIFOQueue
+from node import Nodo
+from estructuras import PilaLIFO
 
-def dfs(graph, start, goal):
-    frontier = LIFOQueue()
-    frontier.ADD(Node(start))
+
+def DFS(graph, start, goal):
+
+    frontier = PilaLIFO()
+    frontier.ADD(Nodo(estado=start, padre=None, accion=None, costoCamino=0))
+
     explored = set()
 
     while not frontier.EMPTY():
+
         current = frontier.POP()
 
-        if current.name == goal:
+        if current.Estado == goal:
             return current
 
-        explored.add(current.name)
+        explored.add(current.Estado)
 
-        for neighbor, cost in graph.neighbors(current.name):
+        for neighbor, cost in graph.vecinos(current.Estado):
+
             if neighbor not in explored:
-                frontier.ADD(Node(neighbor, current))
+
+                child = Nodo(
+                    estado=neighbor,
+                    padre=current,
+                    accion=neighbor,
+                    costoCamino=current.CostoCamino + cost
+                )
+
+                frontier.ADD(child)
 
     return None

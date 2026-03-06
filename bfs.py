@@ -1,21 +1,30 @@
-from node import Node
-from queues import FIFOQueue
+from node import Nodo
+from estructuras import ColaFIFO
 
-def bfs(graph, start, goal):
-    frontier = FIFOQueue()
-    frontier.ADD(Node(start))
-    explored = set()
+def BFS(grafo, inicio, meta):
 
-    while not frontier.EMPTY():
-        current = frontier.POP()
+    frontera = ColaFIFO()
+    frontera.ADD(Nodo(inicio))
+    explorados = set()
 
-        if current.name == goal:
-            return current
+    while not frontera.EMPTY():
 
-        explored.add(current.name)
+        nodo = frontera.POP()
 
-        for neighbor, cost in graph.neighbors(current.name):
-            if neighbor not in explored:
-                frontier.ADD(Node(neighbor, current))
+        if nodo.Estado == meta:
+            return nodo
+
+        explorados.add(nodo.Estado)
+
+        for vecino, costo in grafo.vecinos(nodo.Estado):
+
+            if vecino not in explorados:
+                hijo = Nodo(
+                    estado=vecino,
+                    padre=nodo,
+                    accion=vecino,
+                    costoCamino=nodo.CostoCamino + costo
+                )
+                frontera.ADD(hijo)
 
     return None

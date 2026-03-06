@@ -1,29 +1,27 @@
 import pandas as pd
 
-class Graph:
-    def __init__(self, cost_file, heuristic_file):
+class Grafo:
+    def __init__(self, archivo_costos, archivo_heuristica):
 
-        # Leer matriz de costos
-        cost_df = pd.read_excel(cost_file, index_col=0)
+        matriz = pd.read_excel(archivo_costos, index_col=0)
 
-        self.edges = {}
+        self.aristas = {}
 
-        for origin in cost_df.index:
-            self.edges[origin] = []
-            for destination in cost_df.columns:
-                cost = cost_df.loc[origin, destination]
-                if pd.notna(cost) and cost > 0:
-                    self.edges[origin].append((destination, cost))
+        for origen in matriz.index:
+            self.aristas[origen] = []
+            for destino in matriz.columns:
+                costo = matriz.loc[origen, destino]
+                if pd.notna(costo) and costo > 0:
+                    self.aristas[origen].append((destino, costo))
 
-        # Leer heurística
-        heuristic_df = pd.read_excel(heuristic_file)
+        heuristica_df = pd.read_excel(archivo_heuristica)
 
-        self.heuristic = dict(
-            zip(heuristic_df.iloc[:,0], heuristic_df.iloc[:,1])
+        self.heuristica = dict(
+            zip(heuristica_df.iloc[:,0], heuristica_df.iloc[:,1])
         )
 
-    def neighbors(self, node):
-        return self.edges.get(node, [])
+    def vecinos(self, estado):
+        return self.aristas.get(estado, [])
 
-    def h(self, node):
-        return self.heuristic.get(node, 0)
+    def h(self, estado):
+        return self.heuristica.get(estado, 0)

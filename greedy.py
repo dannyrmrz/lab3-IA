@@ -1,23 +1,33 @@
-from node import Node
-from queues import PriorityQueue
+from node import Nodo
+from estructuras import ColaPrioridad
 
-def greedy(graph, start, goal):
-    frontier = PriorityQueue()
-    frontier.ADD(Node(start, h=graph.h(start)))
-    explored = set()
+def Greedy(grafo, inicio, meta):
 
-    while not frontier.EMPTY():
-        current = frontier.POP()
+    frontera = ColaPrioridad()
+    nodoInicial = Nodo(inicio)
+    nodoInicial.CostoCamino = grafo.h(inicio)
+    frontera.ADD(nodoInicial)
 
-        if current.name == goal:
-            return current
+    explorados = set()
 
-        explored.add(current.name)
+    while not frontera.EMPTY():
 
-        for neighbor, cost in graph.neighbors(current.name):
-            if neighbor not in explored:
-                frontier.ADD(
-                    Node(neighbor, current, h=graph.h(neighbor))
+        nodo = frontera.POP()
+
+        if nodo.Estado == meta:
+            return nodo
+
+        explorados.add(nodo.Estado)
+
+        for vecino, costo in grafo.vecinos(nodo.Estado):
+
+            if vecino not in explorados:
+                hijo = Nodo(
+                    estado=vecino,
+                    padre=nodo,
+                    accion=vecino,
+                    costoCamino=grafo.h(vecino)
                 )
+                frontera.ADD(hijo)
 
     return None
